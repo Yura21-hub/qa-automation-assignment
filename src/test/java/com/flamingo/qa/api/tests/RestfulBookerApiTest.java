@@ -12,6 +12,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -91,6 +93,36 @@ class RestfulBookerApiTest {
 
         Response getResponse = client.getBooking(bookingId);
         assertThat(getResponse.statusCode()).isEqualTo(404);
+    }
+
+    @ParameterizedTest(name = "REST: create booking for {0} {1}")
+    @CsvSource({
+            "Mary, Shelley, 220, true, Breakfast",
+            "Katherine, Johnson, 310, false, Airport transfer"
+    })
+    @Story("Data-driven booking creation")
+    @DisplayName("REST: create bookings from multiple data sets")
+    void shouldCreateBookingsFromMultipleDataSets(
+            String firstName,
+            String lastName,
+            int totalPrice,
+            boolean depositPaid,
+            String additionalNeeds
+    ) {
+        Booking expectedBooking = booking(firstName, lastName, totalPrice, depositPaid, additionalNeeds);
+        BookingResponse createdBooking = createBooking(expectedBooking);
+        int bookingId = createdBooking.getBookingid();
+
+        try {
+            Response getResponse = client.getBooking(bookingId);
+
+            assertThat(getResponse.statusCode()).isEqualTo(200);
+            assertThat(getResponse.as(Booking.class))
+                    .usingRecursiveComparison()
+                    .isEqualTo(expectedBooking);
+        } finally {
+            deleteQuietly(bookingId);
+        }
     }
 
     private BookingResponse createBooking(Booking booking) {

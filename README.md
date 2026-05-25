@@ -17,7 +17,7 @@ Java/Maven test automation project for the Flamingo AQA Engineer home assignment
 
 - Restful Booker API: authentication, create, read, update, delete
 - Hygraph GraphQL demo schema: positive and negative queries
-- DemoQA UI: student form and web table CRUD/search using Page Object Model
+- DemoQA UI: student form and web table CRUD/search/sorting-behavior validation using Page Object Model
 
 ## Prerequisites
 
@@ -50,6 +50,8 @@ Run only UI tests:
 ```bash
 mvn test -Dgroups=ui -Dheadless=true
 ```
+
+Tests are configured for class-level parallel execution with a fixed parallelism of 2.
 
 Generate Allure report after a test run:
 
@@ -103,20 +105,20 @@ src/test/java/com/flamingo/qa
 
 ## Test Strategy
 
-The suite focuses on a small number of meaningful tests rather than volume. API tests cover authentication and the full Restful Booker CRUD flow, with cleanup where test data is created. GraphQL tests cover list pagination, entity lookup by ID, variables, fragments with nested fields, invalid IDs, malformed queries, and validation errors.
+The suite focuses on a small number of meaningful tests rather than volume. API tests cover authentication, the full Restful Booker CRUD flow, and a data-driven booking creation scenario with cleanup where test data is created. GraphQL tests cover list pagination, entity lookup by ID, variables, fragments with nested fields, invalid IDs, malformed queries, and validation errors.
 
-UI tests use Page Object Model to keep selectors and workflows outside the test assertions. DemoQA pages contain ads and fixed banners, so page objects hide those noisy elements before interacting with the form and table. The current DemoQA web table build did not expose stable sorting behavior during implementation, so the automated UI coverage focuses on the reliable add, search, edit, and delete flow.
+UI tests use Page Object Model to keep selectors and workflows outside the test assertions. DemoQA pages contain ads and fixed banners, so page objects hide those noisy elements before interacting with the form and table. Web table coverage includes add, search, edit, delete, and sorting-behavior validation. The current DemoQA Web Tables build no longer exposes a sorting handler for that table, so the sorting test detects whether sorting is available and validates the current stable behavior when it is not.
 
 ## Challenges & Solutions
 
 - Public test services can be slow or temporarily unavailable. The clients use explicit timeouts and tests avoid unnecessary repeated calls.
+- API clients retry only known transient HTTP responses (`429`, `502`, `503`, `504`) once to reduce public-service flakiness without hiding functional failures.
 - Restful Booker data can reset periodically. Tests create their own data and avoid depending on existing bookings.
-- DemoQA has dynamic UI elements. Tests use Playwright auto-waits, stable selectors, and failure screenshots in `target/screenshots`.
+- DemoQA has dynamic UI elements. Tests use Playwright auto-waits, stable selectors, a small custom wait helper for UI state checks, and failure screenshots in `target/screenshots`.
 
 ## What I Would Add With More Time
 
-- More data-driven API cases for booking validation
+- More edge-case API validation for booking field constraints
 - Contract checks for GraphQL response schemas
-- Parallel execution profile after isolating all external-data dependencies
 - Published Allure report in CI
-- Retry policy only for known transient infrastructure failures
+- Browser matrix for UI tests across Chromium, Firefox, and WebKit

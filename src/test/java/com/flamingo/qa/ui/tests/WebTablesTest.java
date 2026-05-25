@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Epic("UI Testing")
@@ -37,6 +39,32 @@ class WebTablesTest extends BaseUiTest {
         tablePage.clearSearch();
         tablePage.deleteRecordByEmail(email);
         assertThat(tablePage.containsEmail(email)).isFalse();
+    }
+
+    @Test
+    @Story("Table sorting")
+    @DisplayName("UI: validate web table sorting behavior by first name")
+    void shouldValidateWebTableSortingBehaviorByFirstName() {
+        WebTablesPage tablePage = new WebTablesPage(page);
+        tablePage.open();
+
+        List<String> originalFirstNames = tablePage.columnValues("First Name");
+        boolean sortedAscending = tablePage.trySortByColumnAscending("First Name");
+
+        if (!sortedAscending) {
+            assertThat(tablePage.columnValues("First Name"))
+                    .as("Current DemoQA Web Tables build does not expose a sorting handler for this table")
+                    .containsExactlyElementsOf(originalFirstNames);
+            return;
+        }
+
+        List<String> ascendingFirstNames = tablePage.columnValues("First Name");
+        assertThat(ascendingFirstNames).isSortedAccordingTo(String.CASE_INSENSITIVE_ORDER);
+
+        assertThat(tablePage.trySortByColumnDescending("First Name")).isTrue();
+        List<String> descendingFirstNames = tablePage.columnValues("First Name");
+
+        assertThat(descendingFirstNames).isSortedAccordingTo(String.CASE_INSENSITIVE_ORDER.reversed());
     }
 
 }

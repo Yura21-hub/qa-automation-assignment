@@ -39,10 +39,10 @@ public class RestfulBookerClient {
     }
 
     public Response authenticate(String username, String password) {
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
                 .body(Map.of("username", username, "password", password))
-                .post("/auth");
+                .post("/auth"));
     }
 
     public String authToken() {
@@ -55,30 +55,30 @@ public class RestfulBookerClient {
     }
 
     public Response createBooking(Booking booking) {
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
                 .body(booking)
-                .post("/booking");
+                .post("/booking"));
     }
 
     public Response getBooking(int bookingId) {
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
-                .get("/booking/{bookingId}", bookingId);
+                .get("/booking/{bookingId}", bookingId));
     }
 
     public Response updateBooking(int bookingId, Booking booking, String authToken) {
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
                 .cookie("token", authToken)
                 .body(booking)
-                .put("/booking/{bookingId}", bookingId);
+                .put("/booking/{bookingId}", bookingId));
     }
 
     public Response deleteBooking(int bookingId, String authToken) {
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
                 .cookie("token", authToken)
-                .delete("/booking/{bookingId}", bookingId);
+                .delete("/booking/{bookingId}", bookingId));
     }
 }

@@ -56,10 +56,10 @@ public class GraphQlClient {
             requestBody.put("variables", variables);
         }
 
-        return given()
+        return HttpRetry.execute(() -> given()
                 .spec(requestSpec)
                 .body(requestBody)
-                .post();
+                .post());
     }
 
     private JsonNode toJson(Response response) {
