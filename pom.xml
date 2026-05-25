@@ -20,6 +20,7 @@
         <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.21.3</jackson.version>
         <allure.version>2.34.0</allure.version>
+        <lombok.version>1.18.46</lombok.version>
         <slf4j.version>2.0.17</slf4j.version>
 
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
@@ -70,6 +71,12 @@
             <artifactId>allure-junit5</artifactId>
             <version>${allure.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

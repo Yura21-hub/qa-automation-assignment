@@ -1,30 +1,13 @@
 package com.flamingo.qa.api.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookingDates {
     private String checkin;
     private String checkout;
-
-    public BookingDates() {
-    }
-
-    public BookingDates(String checkin, String checkout) {
-        this.checkin = checkin;
-        this.checkout = checkout;
-    }
-
-    public String getCheckin() {
-        return checkin;
-    }
-
-    public void setCheckin(String checkin) {
-        this.checkin = checkin;
-    }
-
-    public String getCheckout() {
-        return checkout;
-    }
-
-    public void setCheckout(String checkout) {
-        this.checkout = checkout;
-    }
 }

@@ -12,6 +12,7 @@ Java/Maven test automation project for the Flamingo AQA Engineer home assignment
 - AssertJ
 - Jackson
 - Allure JUnit 5
+- Lombok
 
 ## Covered Areas
 
@@ -107,7 +108,7 @@ src/test/java/com/flamingo/qa
 
 ## Test Strategy
 
-The suite focuses on a small number of meaningful tests rather than volume. API tests cover authentication, the full Restful Booker CRUD flow, and a data-driven booking creation scenario with cleanup where test data is created. GraphQL tests cover list pagination, entity lookup by ID, variables, fragments with nested fields, invalid IDs, malformed queries, and validation errors.
+The suite focuses on a small number of meaningful tests rather than volume. API tests cover authentication, the full Restful Booker CRUD flow, and a data-driven booking creation scenario with cleanup where test data is created. GraphQL tests cover list pagination, entity lookup by ID, variables, fragments with nested fields, invalid IDs, malformed queries, and validation errors. Lombok keeps API DTO boilerplate low while leaving the test flow explicit.
 
 UI tests use Page Object Model to keep selectors and workflows outside the test assertions. DemoQA pages contain ads and fixed banners, so page objects hide those noisy elements before interacting with the form and table. Web table coverage includes add, search, edit, delete, and sorting-behavior validation. The current DemoQA Web Tables build no longer exposes a sorting handler for that table, so the sorting test detects whether sorting is available and validates the current stable behavior when it is not.
 
