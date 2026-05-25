@@ -191,11 +191,17 @@ public class WebTablesPage {
     private void hideNoisyPageElements() {
         page.addStyleTag(new Page.AddStyleTagOptions().setContent("""
                 #fixedban,
+                #RightSide_Advertisement,
+                .Advertisement-Section,
+                .Google-Ad,
+                .col-12.mt-4.col-md-3.col-xl-3,
+                div[id^='Ad.Plus'],
                 footer,
                 iframe,
                 .adsbygoogle {
                   display: none !important;
                   visibility: hidden !important;
+                  pointer-events: none !important;
                 }
                 """));
     }
