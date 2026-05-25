@@ -111,11 +111,11 @@ jobs:
       - name: Generate Allure report
         run: |
           mvn -B allure:report
-          ./.allure/allure-*/bin/allure generate target/allure-results --clean -o target/allure-report
+          ./.allure/allure-*/bin/allure generate target/allure-results --clean --single-file -o target/allure-report
 
       - name: Upload Allure report
         uses: actions/upload-artifact@v6
         with:
           name: allure-report
-          path: target/allure-report
+          path: target/allure-report/index.html
           if-no-files-found: error
