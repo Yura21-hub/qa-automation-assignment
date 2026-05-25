@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   api-tests:
     name: API tests
@@ -57,6 +60,7 @@ jobs:
         with:
           name: ui-failure-screenshots
           path: target/screenshots
+          if-no-files-found: ignore
 
       - name: Upload Surefire reports
         if: always()
