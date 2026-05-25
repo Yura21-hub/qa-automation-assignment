@@ -1,0 +1,12 @@
+target/
+allure-results/
+allure-report/
+.allure/
+.idea/
+.oca/
+.vscode/
+*.iml
+*.log
+.DS_Store
+playwright-report/
+test-results/

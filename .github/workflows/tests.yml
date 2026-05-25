@@ -1,0 +1,66 @@
+name: Test Suite
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  api-tests:
+    name: API tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Run API tests
+        run: mvn -B test -Dgroups=api
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: api-surefire-reports
+          path: target/surefire-reports
+
+  ui-tests:
+    name: UI tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Install Playwright Chromium
+        run: mvn -B exec:java -Dexec.classpathScope=test -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps chromium"
+
+      - name: Run UI tests
+        run: mvn -B test -Dgroups=ui -Dheadless=true
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: ui-failure-screenshots
+          path: target/screenshots
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: ui-surefire-reports
+          path: target/surefire-reports
