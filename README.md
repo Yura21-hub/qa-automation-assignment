@@ -71,6 +71,8 @@ Surefire XML and text reports are generated after every test run in:
 target/surefire-reports
 ```
 
+GitHub Actions publishes the generated Allure HTML report as the `allure-report` workflow artifact.
+
 ## Configuration
 
 Defaults can be overridden with Java system properties or environment variables.
@@ -115,10 +117,3 @@ UI tests use Page Object Model to keep selectors and workflows outside the test 
 - API clients retry only known transient HTTP responses (`429`, `502`, `503`, `504`) once to reduce public-service flakiness without hiding functional failures.
 - Restful Booker data can reset periodically. Tests create their own data and avoid depending on existing bookings.
 - DemoQA has dynamic UI elements. Tests use Playwright auto-waits, stable selectors, a small custom wait helper for UI state checks, and failure screenshots in `target/screenshots`.
-
-## What I Would Add With More Time
-
-- More edge-case API validation for booking field constraints
-- Contract checks for GraphQL response schemas
-- Published Allure report in CI
-- Browser matrix for UI tests across Chromium, Firefox, and WebKit
